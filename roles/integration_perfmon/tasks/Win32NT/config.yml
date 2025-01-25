@@ -1,0 +1,14 @@
+---
+# we could check this in but defaults are fine
+- name: Move Counter Config
+  ansible.windows.win_copy:
+    src: "{{ newrelic_infra_collection_custom_integrations_directory }}\\nri-perfmon\\nri-perfmon-definition.yml"
+    dest: "{{ newrelic_infra_collection_custom_integrations_directory }}"
+    remote_src: True
+  notify: restart newrelic
+
+- name: Template Integration Config
+  ansible.windows.win_template:
+    src: nri-perfmon-config.yml.j2
+    dest: "{{ newrelic_infra_collection_integrations_directory }}\\nri-perfmon-config.yml"
+  notify: restart newrelic

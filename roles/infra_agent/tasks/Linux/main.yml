@@ -1,0 +1,16 @@
+---
+- name: Install NR Infra Agent
+  ansible.builtin.include_tasks: "{{ role_path }}/tasks/Linux/install.yml"
+
+- name: Template Infra Config File
+  ansible.builtin.template:
+    src: newrelic-infra.yml.j2
+    dest: /etc/newrelic-infra.yml
+  notify: restart newrelic
+
+- name: Start and Enable Infra Service
+  ansible.builtin.service:
+    name: newrelic-infra
+    state: started
+    enabled: True
+  when: molecule_yml is not defined

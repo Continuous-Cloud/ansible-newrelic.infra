@@ -1,0 +1,6 @@
+{% for var_name, obfuscated in _integration_mssql_obfuscated_secrets.items() %}
+  {{ _integration_mssql_pretty_name }}-{{ var_name }}:
+    obfuscated:
+      key: '{{ obfuscated.key }}'
+      secret: '{{ obfuscated.secret }}'
+{% endfor %}

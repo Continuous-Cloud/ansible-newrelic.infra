@@ -1,0 +1,26 @@
+---
+galaxy_info:
+  role_name: infra_agent
+  author: Mike Morency
+  description: >-
+    Installs New Relic agent(s) on the remote host
+  license: license (BSD)
+
+  min_ansible_version: '2.9'
+
+  platforms:
+    - name: Windows
+      versions:
+        - '2016'
+        - '2012'
+    - name: Amazon Linux
+      version:
+        - '2023'
+    - name: EL
+      versions:
+        - '8'
+        - '7'
+
+  galaxy_tags: []
+
+dependencies: []

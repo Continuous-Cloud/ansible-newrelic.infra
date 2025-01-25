@@ -1,0 +1,25 @@
+---
+galaxy_info:
+  role_name: integration_redis
+  author: Mike Morency
+  description: >-
+    Install the new relic redis integration for redhat hosts. Provides extra monitoring and performance metrics
+    for a redis instance
+
+  license: license (BSD)
+
+  min_ansible_version: '2.9'
+
+  platforms:
+    - name: Amazon Linux
+      version:
+        - '2023'
+    - name: EL
+      versions:
+        - '9'
+        - '8'
+
+  galaxy_tags: []
+
+dependencies:
+  - role: newrelic.infra.infra_agent

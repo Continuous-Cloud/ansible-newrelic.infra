@@ -1,0 +1,4 @@
+---
+integration_perfmon_vars:
+  latest_url: 'https://github.com/newrelic/nri-perfmon/releases/latest'
+  download_url: 'https://github.com/newrelic/nri-perfmon/releases/download/'

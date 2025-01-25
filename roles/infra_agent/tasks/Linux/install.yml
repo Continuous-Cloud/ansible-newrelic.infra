@@ -1,0 +1,47 @@
+---
+- name: Setup Redhat Repo
+  when: ansible_facts['os_family'] == 'RedHat'
+  vars:
+    _repo_distro:
+      redhat: el
+      amazon: amazonlinux
+  block:
+    - name: Download GPG Key
+      ansible.builtin.rpm_key:
+        key: 'https://download.newrelic.com/infrastructure_agent/gpg/newrelic-infra.gpg'
+        state: present
+    - name: Setup Yum Repo
+      ansible.builtin.yum_repository:
+        baseurl: "https://download.newrelic.com/infrastructure_agent/linux/yum/\
+                  {{ _repo_distro[ansible_distribution | lower] }}/\
+                  {{ ansible_distribution_major_version }}/{{ ansible_architecture }}"
+        gpgcheck: True
+        gpgkey: 'https://download.newrelic.com/infrastructure_agent/gpg/newrelic-infra.gpg'
+        name: newrelic-infra
+        repo_gpgcheck: True
+        state: present
+        description: New Relic Infrastructure
+
+- name: Setup Ubuntu Repo
+  when: ansible_facts['os_family'] == 'Debian'
+  block:
+    - name: Install GPG
+      ansible.builtin.apt:
+        name: gnupg
+        state: present
+    - name: Download GPG Key
+      ansible.builtin.apt_key:
+        url: 'https://download.newrelic.com/infrastructure_agent/gpg/newrelic-infra.gpg'
+        state: present
+    - name: Add New Relic Infra Repo
+      ansible.builtin.apt_repository:
+        repo: >-
+          deb https://download.newrelic.com/infrastructure_agent/linux/apt
+          {{ ansible_facts['lsb']['codename'] }} main
+        state: present
+        filename: ansible-newrelic-infra
+
+- name: Install Infra Agent
+  ansible.builtin.package:
+    name: newrelic-infra
+    state: latest

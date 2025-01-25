@@ -1,0 +1,26 @@
+---
+- name: Download Installer
+  block:
+    - name: Download MSI on Remote Host
+      ansible.windows.win_get_url:
+        url: "{{ integration_mssql_vars.url }}"
+        dest: 'c:\nrsqlserver.msi'
+  rescue:
+    - name: Download MSI on Ansible Host
+      ansible.builtin.get_url:
+        url: "{{ integration_mssql_vars.url }}"
+        dest: /tmp/nrsqlserver.msi
+      run_once: True
+      become: False
+      delegate_to: localhost
+    - name: Copy Package Over
+      ansible.windows.win_copy:
+        src: /tmp/nrsqlserver.msi
+        dest: 'c:\nrsqlserver.msi'
+        remote_src: False
+
+- name: Install MSSQL Agent
+  ansible.windows.win_package:
+    path: 'c:\nrsqlserver.msi'
+    arguments: /q
+    product_id: newrelic-mssql

@@ -1,0 +1,54 @@
+---
+- name: Create Config Parts Directory
+  ansible.windows.win_file:
+    path: "{{ integration_mssql_vars.root_dir }}\\mssql_config_parts"
+    state: directory
+
+- name: Create Instance Config Part
+  ansible.windows.win_template:
+    dest: "{{ integration_mssql_vars.root_dir }}\\mssql_config_parts\\{{ _integration_mssql_pretty_name }}.integration"
+    src: instance_config_part.j2
+  register: _instance_config_part
+
+- name: Create Instance Variable Part
+  ansible.windows.win_template:
+    dest: "{{ integration_mssql_vars.root_dir }}\\mssql_config_parts\\{{ _integration_mssql_pretty_name }}.variables"
+    src: instance_variables_part.j2
+  register: _variable_config_part
+
+- name: Create Custom Query Config
+  ansible.windows.win_copy:
+    dest: "{{ integration_mssql_vars.root_dir }}\\{{ _integration_mssql_pretty_name }}_custom_queries.yml"
+    content: "{{ integration_mssql_custom_queries | to_yaml }}"
+  when: integration_mssql_custom_queries
+
+- name: Update Integration Config File
+  when: _instance_config_part is changed or _variable_config_part is changed
+  block:
+    # Im not sure why but it seems like nr locks this config file. It doesnt do
+    # that with other files so the handler usually suffices
+    - name: Stop New Relic Service To Release File Lock
+      ansible.windows.win_service:
+        name: newrelic-infra
+        state: stopped
+    - name: Regenerate Master Config
+      ansible.windows.win_shell: |-
+        Set-Content "{{ integration_mssql_vars.root_dir }}\{{ integration_mssql_vars.config_file }}" -Value "---"
+        Add-Content "{{ integration_mssql_vars.root_dir }}\{{ integration_mssql_vars.config_file }}" -Value "# This file is managed by the newrelic.infra.integration_mssql role"
+
+        $varParts = Get-ChildItem "{{ integration_mssql_vars.root_dir }}\\mssql_config_parts" -Filter "*.variables"
+        if ($varParts) {
+        Add-Content "{{ integration_mssql_vars.root_dir }}\{{ integration_mssql_vars.config_file }}" -Value "variables:"
+        $varParts | foreach { $_ | get-content | add-content "{{ integration_mssql_vars.root_dir }}\{{ integration_mssql_vars.config_file }}" }
+        }
+
+        Add-Content "{{ integration_mssql_vars.root_dir }}\{{ integration_mssql_vars.config_file }}" -Value "integrations: "
+        Get-ChildItem "{{ integration_mssql_vars.root_dir }}\\mssql_config_parts" -Filter "*.integration" | `
+        foreach { $_ | get-content | add-content "{{ integration_mssql_vars.root_dir }}\{{ integration_mssql_vars.config_file }}" }
+      register: _gen_master
+      failed_when: _gen_master.rc != 0 or _gen_master.stderr
+  always:
+    - name: Start The New Relic Service Again
+      ansible.windows.win_service:
+        name: newrelic-infra
+        state: started

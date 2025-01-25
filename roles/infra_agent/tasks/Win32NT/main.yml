@@ -1,0 +1,41 @@
+---
+- name: Get Agent Version On Remote
+  community.windows.win_file_version:
+    path: "{{ infra_agent_vars.agent_dll }}"
+  register: _agent_remote_version
+  failed_when: False
+
+- name: Check Installed Version Against Latest
+  when: _agent_remote_version.win_file_version.file_version is defined
+  block:
+    - name: Get Latest Infra Agent Version
+      ansible.builtin.set_fact:
+        _agent_latest_version: "{{ lookup('newrelic.infra.latest_agent_version') }}"
+      run_once: True
+    - name: Compare Installed Version Against Latest
+      ansible.builtin.set_fact:
+        _agent_needs_update: >-
+          {{ _agent_remote_version.win_file_version.file_version is
+          version(_agent_latest_version, '<') }}
+    - name: Print Versions
+      ansible.builtin.debug:
+        msg:
+          - The latest new relic infra agent version is {{ _agent_latest_version }}
+          - >-
+              The remote host has version
+              {{ _agent_remote_version.win_file_version.file_version }} installed
+
+- name: Install Infra Agent
+  ansible.builtin.include_tasks: "{{ role_path }}/tasks/Win32NT/install.yml"
+  when: _agent_remote_version.win_file_version.file_version is not defined or _agent_needs_update
+
+- name: Template Infra Config
+  ansible.windows.win_template:
+    src: newrelic-infra.yml.j2
+    dest: "{{ newrelic_infra_collection_infra_directory }}\\newrelic-infra.yml"
+  notify: restart newrelic
+
+- name: Make Sure The NR Infra Service Is Running
+  ansible.windows.win_service:
+    name: newrelic-infra
+    state: started

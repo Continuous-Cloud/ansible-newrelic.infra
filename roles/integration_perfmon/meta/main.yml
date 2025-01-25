@@ -1,0 +1,23 @@
+---
+galaxy_info:
+  role_name: integration_perfmon
+  author: Mike Morency
+  description: >-
+    Install the new relic perfmon integration for windows hosts. Provides a lot of extra performance metrics
+    and counters that are not provided by the new relic infra agent by default
+
+  license: license (BSD)
+
+  min_ansible_version: '2.9'
+
+  platforms:
+    - name: Windows
+      versions:
+        - '2019'
+        - '2016'
+        - '2012'
+
+  galaxy_tags: []
+
+dependencies:
+  - role: newrelic.infra.infra_agent

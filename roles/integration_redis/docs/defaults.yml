@@ -1,0 +1,6 @@
+---
+nr_redis_hostname: str, The hostname of the redis instance that should be monitored
+nr_redis_port: int, The port of the redis instance that should be monitored
+nr_redis_username: str, The username that should be used to authenticate to the redis instance
+nr_redis_password: str, The password that should be used to authenticate to the redis instance
+nr_redis_use_tls: bool, If true, SSL should be used when connecting to the redis instance

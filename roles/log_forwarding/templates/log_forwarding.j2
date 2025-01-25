@@ -1,0 +1,19 @@
+###############################################################################
+#                                                                             #
+# Forward Logs from File to New Relic                                         #
+# This file is managed by ansible                                             #
+#                                                                             #
+###############################################################################
+logs:
+{% for name, config in log_forwarding_configs.items() %}
+  - name: {{ name }}
+    file: {{ config.file }}
+    max_line_kb: {{ config.max_line_kb | default(128) }}
+    {% if config.attributes %}
+    attributes:
+      {%- for k,v in config.attributes.items() +%}
+      {{ k }}: {{ v }}
+    {% else %}
+    attributes: {}
+    {% endfor %}
+{% endfor %}

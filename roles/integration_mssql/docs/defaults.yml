@@ -1,0 +1,14 @@
+---
+nr_mssql_hostname: str, The hostname of the SQL server to which we should connect
+nr_mssql_username: str, The username to use when authenticating to the SQL server
+nr_mssql_password: str, The password to use when authenticating to the SQL server
+nr_mssql_port: int, The port to which we should connect.  Either instance or port is required
+nr_mssql_instance: str, The name of the SQL instance to which we should connect. Either instance or port is required
+nr_mssql_ssl: bool, If true, SSL will be used when connecting to the SQL instance
+nr_mssql_custom_labels: dict, A dictionary of custom labels that should be added to the agent
+nr_mssql_custom_queries: >-
+  list(dict), A list of custom query configs for this instance. See an example here
+  https://github.com/newrelic/nri-mssql/blob/master/mssql-custom-query.yml.sample
+nr_mssql_obfuscate_secrets: >-
+  bool, If true, the username and password values are obfuscated before adding them
+  to the config file

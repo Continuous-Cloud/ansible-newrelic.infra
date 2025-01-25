@@ -1,0 +1,42 @@
+---
+- name: Download Installer
+  block:
+    - name: Download MSI on Remote Host
+      ansible.windows.win_get_url:
+        url: 'https://download.newrelic.com/infrastructure_agent/windows/newrelic-infra.msi'
+        dest: 'c:\nrinfra.msi'
+  rescue:
+    - name: Download MSI on Ansible Host
+      ansible.builtin.get_url:
+        url: 'https://download.newrelic.com/infrastructure_agent/windows/newrelic-infra.msi'
+        dest: /tmp/nrinfra.msi
+      run_once: True
+      become: False
+      delegate_to: localhost
+    - name: Copy Package Over
+      ansible.windows.win_copy:
+        src: /tmp/nrinfra.msi
+        dest: 'c:\nrinfra.msi'
+        remote_src: False
+
+- name: Lookup Infra Service
+  ansible.windows.win_service_info:
+    name: newrelic-infra
+  register: _service_stat
+
+- name: Stop Service If It Exists
+  ansible.windows.win_service:
+    name: newrelic-infra
+    state: stopped
+  when: _service_stat.services[0] is defined
+
+- name: Run MSI to Install Infra Agent
+  ansible.windows.win_package:
+    path: 'c:\nrinfra.msi'
+    arguments: GENERATE_CONFIG=true LICENSE_KEY={{ infra_agent_license_key }}
+    product_id: '{CC0F76DD-EB57-4A6F-A01A-BCC29EFB73BE}'
+
+- name: Remove Installer if present
+  ansible.windows.win_file:
+    path: 'c:\nrinfra.msi'
+    state: absent

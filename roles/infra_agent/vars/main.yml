@@ -1,0 +1,3 @@
+---
+infra_agent_vars:
+  agent_dll: "{{ newrelic_infra_collection_infra_directory }}\\newrelic-infra.exe"

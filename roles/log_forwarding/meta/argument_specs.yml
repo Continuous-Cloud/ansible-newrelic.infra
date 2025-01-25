@@ -1,0 +1,57 @@
+---
+argument_specs:
+  main:
+    short_description: Main entry point for the infra_agent role
+    description:
+      - This is the main entrypoint for the infra_agent role.
+    options:
+      log_forwarding_config_file:
+        type: "str"
+        required: true
+        description:
+          - The New Relic license key to use when installing and configuring this agent.
+
+      infra_agent_custom_attributes:
+        type: "dict"
+        required: false
+        default: {}
+        description:
+          - A dictionary of key value pairs that should be applied to the agent as custom attributes.
+          - These attributes show up as tags on the host that is being monitored
+
+      infra_agent_enable_docker_monitoring:
+        type: "bool"
+        required: false
+        default: false
+        description: Whether the agent should collect information about docker containers running on the host.
+
+      infra_agent_process_sample_rate:
+        type: int
+        elements: str
+        required: false
+        description: The rate in seconds at which the agent collects system metrics.
+        default: 20
+
+      infra_agent_enable_process_metrics:
+        type: bool
+        required: false
+        default: true
+        description: Whether the agent should collect metrics about processes running on the server.
+
+      infra_agent_custom_metric_names:
+        type: "int"
+        elements: "str"
+        required: false
+        description:
+          - A list process names or regex patterns to determine which processes are monitored by the agent.
+          - Regex patterns should be passed in as "regex '.*my_pattern'"
+          - This is unused if infra_agent_enable_process_metrics is false.
+        default: []
+
+      infra_agent_max_procs:
+        type: "int"
+        required: false
+        description: >-
+          The maximum number of processes that the agent can spin up as needed. Too many process can strain the server
+          while too few can cause the agent to crash.
+        default: 4

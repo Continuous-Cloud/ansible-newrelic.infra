@@ -1,0 +1,28 @@
+---
+### REQUIRED
+namespace: newrelic
+name: infra
+
+version: '1.0.0'
+
+readme: README.md
+
+authors:
+  - Mike Morency <mike.morency@continuouscloud.io>
+
+description: >-
+  Modules and roles for managing New Relic resources and agents
+
+license:
+  - 'GPL-2.0-or-later'
+
+license_file: ''
+
+tags: []
+
+dependencies: []
+
+repository:
+
+build_ignore:
+  - .venv

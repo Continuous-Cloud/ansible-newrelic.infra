@@ -1,0 +1,11 @@
+#
+# New Relic Infrastructure Perfmon On-Host Integration
+#
+integration_name: com.newrelic.perfmon
+instances:
+  - name: nri-perfmon-metrics
+    command: metrics
+    labels:
+    {%- for k, v in integration_perfmon_labels.items() +%}
+      {{ k }}: {{ v }}
+    {%- endfor %}

@@ -1,0 +1,29 @@
+---
+- name: Gather System Facts
+  ansible.builtin.setup:
+    gather_subset:
+      - system
+  when: ansible_system is not defined
+
+- name: Load New Relic Shared Vars
+  ansible.builtin.include_vars: "{{ role_path }}/../../vars/{{ ansible_system }}.yml"
+
+- name: This Role Supports Linux Only
+  when: ansible_system == 'Linux'
+  block:
+    - name: Insert Redis Config Header
+      ansible.builtin.blockinfile:
+        path: "{{ newrelic_infra_collection_integrations_directory }}/redis-config.yml"
+        insertbefore: BOF
+        marker: "# {mark} ANSIBLE MANAGED BLOCK HEADER"
+        create: True
+        mode: '0644'
+        block: |
+          ---
+          integrations:
+    - name: Insert Redis Instance Config
+      ansible.builtin.blockinfile:
+        path: "{{ newrelic_infra_collection_integrations_directory }}/redis-config.yml"
+        block: "{{ lookup('ansible.builtin.template', role_path + '/templates/redis-instance.j2') }}"
+        marker: "# {mark} ANSIBLE MANAGED BLOCK {{ integration_redis_hostname }}-{{ integration_redis_port }}"
+      notify: restart newrelic

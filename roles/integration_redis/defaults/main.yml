@@ -1,0 +1,6 @@
+---
+integration_redis_hostname: localhost
+integration_redis_port: 6379
+integration_redis_username: ""
+integration_redis_password: ""
+integration_redis_use_tls: False

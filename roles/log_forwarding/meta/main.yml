@@ -1,0 +1,27 @@
+---
+galaxy_info:
+  role_name: log_forwarding
+  author: Mike Morency
+  description: >-
+    Creates a log forwarding config for the New Relic agent to use
+  license: license (BSD)
+
+  min_ansible_version: '2.9'
+
+  platforms:
+    - name: Windows
+      versions:
+        - '2016'
+        - '2012'
+    - name: Amazon Linux
+      version:
+        - '2023'
+    - name: EL
+      versions:
+        - '8'
+        - '7'
+
+  galaxy_tags: []
+
+dependencies:
+  - newrelic.infra.infra_agent

@@ -1,0 +1,21 @@
+---
+galaxy_info:
+  role_name: integration_mssql
+  author: Mike Morency
+  description: Install the new relic mssql agent. Includes the infra agent as a dependency
+
+  license: license (BSD)
+
+  min_ansible_version: '2.9'
+
+  platforms:
+    - name: Windows
+      versions:
+        - '2019'
+        - '2016'
+        - '2012'
+
+  galaxy_tags: []
+
+dependencies:
+  - role: newrelic.infra.infra_agent

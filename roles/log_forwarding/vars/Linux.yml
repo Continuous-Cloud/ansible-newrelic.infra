@@ -1,0 +1,2 @@
+---
+log_forwarding_config_directory: /etc/newrelic-infra/logging.d

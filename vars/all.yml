@@ -1,0 +1,3 @@
+---
+# https://github.com/newrelic/newrelic-cli/releases
+newrelic_infra_collection_cli_version: '0.83.0'

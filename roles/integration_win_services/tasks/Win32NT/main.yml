@@ -1,0 +1,16 @@
+---
+- name: Create Integrations Directory
+  ansible.windows.win_file:
+    path: "{{ newrelic_infra_collection_integrations_directory }}"
+    state: directory
+
+- name: Delete Sample File
+  ansible.windows.win_file:
+    path: "{{ newrelic_infra_collection_integrations_directory }}\\winservices-config.yml.sample"
+    state: absent
+
+- name: Template Config
+  ansible.windows.win_template:
+    src: winservices-config.yml.j2
+    dest: "{{ newrelic_infra_collection_integrations_directory }}\\winservices-config.yml"
+  notify: restart newrelic

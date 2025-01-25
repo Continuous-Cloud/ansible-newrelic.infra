@@ -1,0 +1,22 @@
+---
+- name: Gather System Facts
+  ansible.builtin.setup:
+    gather_subset:
+      - system
+  when: ansible_system is not defined
+
+- name: Load New Relic Shared Vars
+  ansible.builtin.include_vars: "{{ role_path }}/../../vars/{{ _file }}"
+  loop:
+    - all.yml
+    - "{{ ansible_system }}.yml"
+  loop_control:
+    loop_var: _file
+
+- name: Check Mandatory Variables Are Defined
+  ansible.builtin.assert:
+    that:
+      - infra_agent_license_key is defined
+
+- name: Load OS Specific Tasks
+  ansible.builtin.include_tasks: "{{ role_path }}/tasks/{{ ansible_system }}/main.yml"

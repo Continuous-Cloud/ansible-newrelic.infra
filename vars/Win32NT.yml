@@ -1,0 +1,4 @@
+---
+newrelic_infra_collection_infra_directory: 'C:\Program Files\New Relic\newrelic-infra'
+newrelic_infra_collection_integrations_directory: 'C:\Program Files\New Relic\newrelic-infra\integrations.d'
+newrelic_infra_collection_custom_integrations_directory: 'C:\Program Files\New Relic\newrelic-infra\custom-integrations'

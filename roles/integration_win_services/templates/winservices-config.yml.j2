@@ -1,0 +1,12 @@
+integrations:
+  - name: nri-winservices
+    config:
+      exporter_bind_address: 127.0.0.1
+      exporter_bind_port: 9182
+      include_matching_entities:
+        windowsService.name:
+          {%- for name in integration_win_services_include_service_names +%}
+          - {{ name }}
+          {%- endfor +%}
+      scrape_interval: 60s
+    timeout: 60s

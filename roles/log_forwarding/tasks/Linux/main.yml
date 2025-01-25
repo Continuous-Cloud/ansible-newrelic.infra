@@ -1,0 +1,15 @@
+---
+- name: Template Over New Relic Log Forwarding Files
+  ansible.windows.template:
+    src: "{{ log_forwarding_src_template }}"
+    dest: "{{ log_forwarding_config_directory }}/\
+           {{ log_forwarding_src_template | basename | regex_replace('.j2', '') }}"
+  notify: restart newrelic
+  when: log_forwarding_src_template
+
+- name: Template Over New Relic Log Forwarding Configs
+  ansible.windows.template:
+    src: log_forwarding.j2
+    dest: "{{ log_forwarding_config_directory }}/{{ log_forwarding_configs_name }}.yml"
+  notify: restart newrelic
+  when: log_forwarding_configs

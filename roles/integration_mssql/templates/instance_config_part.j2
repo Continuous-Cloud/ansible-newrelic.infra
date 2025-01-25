@@ -1,0 +1,40 @@
+  - name: nri-mssql
+    env:
+      METRICS: true
+      HOSTNAME: {{ integration_mssql_hostname }}
+
+      {%- if integration_mssql_obfuscate_secrets +%}
+      USERNAME: {% raw %}${{% endraw %}{{ _integration_mssql_pretty_name }}-username{% raw %}}{% endraw +%}
+      PASSWORD: {% raw %}${{% endraw %}{{ _integration_mssql_pretty_name }}-password{% raw %}}{% endraw +%}
+      {%- else +%}
+      USERNAME: {{ integration_mssql_username }}
+      PASSWORD: {{ integration_mssql_password }}
+      {%- endif %}
+
+      {%- if integration_mssql_port is defined +%}
+      PORT: {{ integration_mssql_port }}
+      {%- elif integration_mssql_instance is defined +%}
+      INSTANCE: {{ integration_mssql_instance }}
+      {%- endif %}
+
+      {%- if integration_mssql_ssl +%}
+      ENABLE_SSL: true
+      TRUST_SERVER_CERTIFICATE: true
+      {%- endif %}
+
+      {%- if integration_mssql_custom_queries +%}
+      CUSTOM_METRICS_CONFIG: '{{ integration_mssql_vars.root_dir }}\{{ _integration_mssql_pretty_name }}_custom_queries.yml'
+      {%- endif %}
+
+    interval: 15s
+    labels:
+      role: mssql
+      db_hostname: {{ integration_mssql_hostname }}
+      {%- if integration_mssql_port is defined +%}
+      db_port: {{ integration_mssql_port }}
+      {%- elif integration_mssql_instance is defined +%}
+      db_instance: {{ integration_mssql_instance }}
+      {%- endif %}
+      {%- for key,val in integration_mssql_custom_labels.items() +%}
+      {{ key }}: {{ val }}
+      {%- endfor %}

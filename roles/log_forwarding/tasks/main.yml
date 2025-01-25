@@ -1,0 +1,12 @@
+---
+- name: Gather System Facts
+  ansible.builtin.setup:
+    gather_subset:
+      - system
+  when: ansible_system is not defined
+
+- name: Load OS Specific Vars
+  ansible.builtin.include_vars: "{{ role_path }}/vars/{{ ansible_system }}.yml"
+
+- name: Load OS Specific Tasks
+  ansible.builtin.include_tasks: "{{ role_path }}/tasks/{{ ansible_system }}/main.yml"

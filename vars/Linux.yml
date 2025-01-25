@@ -1,0 +1,3 @@
+---
+newrelic_infra_collection_infra_directory: /etc/newrelic-infra
+newrelic_infra_collection_integrations_directory: /etc/newrelic-infra/integrations.d

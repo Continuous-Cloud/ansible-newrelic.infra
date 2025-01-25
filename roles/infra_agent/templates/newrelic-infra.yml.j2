@@ -1,0 +1,47 @@
+#
+# New Relic infrastructure agent configuration file
+#
+# To use this file, change its name to newrelic-infra.yml and move it to:
+#    - Linux: /etc/newrelic-infra.yml
+#    - Windows: C:\Program Files\New Relic\newrelic-infra\newrelic-infra.yml
+#
+
+#
+# Option : license_key
+# Value  : 40-character hexadecimal string provided by New Relic. This is the
+#          only required value in your config file.
+# Default: none
+#
+license_key: {{ infra_agent_license_key }}
+max_procs: {{ infra_agent_max_procs }}
+payload_compression_level: 6
+
+{% if infra_agent_custom_attributes %}
+custom_attributes:
+{%- for k, v in infra_agent_custom_attributes.items() +%}
+  {{ k }}: {{ v }}
+{%- endfor %}
+{% else %}
+custom_attributes: {}
+{% endif %}
+
+{% if infra_agent_enable_process_metrics %}
+enable_process_metrics: true
+include_matching_metrics:
+    process.name:
+    {%- for metric in infra_agent_custom_metric_names +%}
+      - {{ metric }}
+    {%- endfor %}
+{% else %}
+enable_process_metrics: false
+{% endif %}
+
+{% if not infra_agent_enable_docker_monitoring %}
+features:
+  docker_enabled: false
+{% endif %}
+
+metrics_process_sample_rate: {{ infra_agent_process_sample_rate }}
+
+log_to_stdout: true
+verbose: 0

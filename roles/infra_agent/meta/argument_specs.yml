@@ -27,9 +27,26 @@ argument_specs:
 
       infra_agent_process_sample_rate:
         type: int
-        elements: str
+        required: false
+        description: The rate in seconds at which the agent collects process metrics.
+        default: 20
+
+      infra_agent_system_sample_rate:
+        type: int
         required: false
         description: The rate in seconds at which the agent collects system metrics.
+        default: 20
+
+      infra_agent_storage_sample_rate:
+        type: int
+        required: false
+        description: The rate in seconds at which the agent collects storage metrics.
+        default: 20
+
+      infra_agent_network_sample_rate:
+        type: int
+        required: false
+        description: The rate in seconds at which the agent collects network metrics.
         default: 20
 
       infra_agent_enable_process_metrics:

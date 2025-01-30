@@ -3,5 +3,8 @@ infra_agent_custom_attributes: {}
 infra_agent_enable_docker_monitoring: True
 infra_agent_enable_process_metrics: True
 infra_agent_process_sample_rate: 20
+infra_agent_system_sample_rate: 20
+infra_agent_network_sample_rate: 20
+infra_agent_storage_sample_rate: 20
 infra_agent_custom_metric_names: []
 infra_agent_max_procs: 4

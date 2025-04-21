@@ -12,18 +12,28 @@
   when: newrelic_infra_collection_cli_version is not defined
 
 - name: Install The New Relic CLI Tool
-  ansible.builtin.package:
-    name: "https://github.com/newrelic/newrelic-cli/releases/download/\
-           v{{ newrelic_infra_collection_cli_version }}/newrelic-cli_{{ newrelic_infra_collection_cli_version }}_Linux_\
-           {{ _arch }}.{{ _file_type }}"
-    state: present
-    # disable_gpg_check: True
-  environment:
-    DEBIAN_FRONTEND: noninteractive
-  delegate_to: localhost
-  delegate_facts: True
   vars:
     _arch: >-
       {{ (hostvars['localhost'].ansible_architecture == 'aarch64') | ternary('arm64', 'x86_64') }}
     _file_type: >-
       {{ (hostvars['localhost'].ansible_os_family == 'Debian') | ternary('deb', 'rpm') }}
+    _url: "https://github.com/newrelic/newrelic-cli/releases/download/\
+           v{{ newrelic_infra_collection_cli_version }}/newrelic-cli_{{ newrelic_infra_collection_cli_version }}_Linux_\
+           {{ _arch }}.{{ _file_type }}"
+  block:
+    - name: Install CLI Tool From Deb
+      ansible.builtin.apt:
+        deb: "{{ _url }}"
+        state: present
+      environment:
+        DEBIAN_FRONTEND: noninteractive
+      delegate_to: localhost
+      delegate_facts: True
+      when: _file_type == 'deb'
+    - name: Install CLI Tool From RPM
+      ansible.builtin.dnf:
+        name: "{{ _url }}"
+        state: present
+      delegate_to: localhost
+      delegate_facts: True
+      when: _file_type == 'rpm'

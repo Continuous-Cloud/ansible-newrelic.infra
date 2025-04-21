@@ -12,6 +12,9 @@
   when: newrelic_infra_collection_cli_version is not defined
 
 - name: Install The New Relic CLI Tool
+  delegate_to: localhost
+  delegate_facts: True
+  become: True
   vars:
     _arch: >-
       {{ (hostvars['localhost'].ansible_architecture == 'aarch64') | ternary('arm64', 'x86_64') }}
@@ -27,13 +30,10 @@
         state: present
       environment:
         DEBIAN_FRONTEND: noninteractive
-      delegate_to: localhost
-      delegate_facts: True
+
       when: _file_type == 'deb'
     - name: Install CLI Tool From RPM
       ansible.builtin.dnf:
         name: "{{ _url }}"
         state: present
-      delegate_to: localhost
-      delegate_facts: True
       when: _file_type == 'rpm'

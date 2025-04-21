@@ -9,12 +9,12 @@
 
 - name: Load New Relic Shared Vars
   ansible.builtin.include_vars: ../../vars/all.yml
-  when: newrelic_cli_version is not defined
+  when: newrelic_infra_collection_cli_version is not defined
 
 - name: Install The New Relic CLI Tool
   ansible.builtin.package:
     name: "https://github.com/newrelic/newrelic-cli/releases/download/\
-           v{{ newrelic_cli_version }}/newrelic-cli_{{ newrelic_cli_version }}_Linux_\
+           v{{ newrelic_infra_collection_cli_version }}/newrelic-cli_{{ newrelic_infra_collection_cli_version }}_Linux_\
            {{ _arch }}.{{ _file_type }}"
     state: present
     disable_gpg_check: True

@@ -4,4 +4,4 @@ integration_mssql_vars:
   return_codes: [0, 666, 3010, 3221225477]
   url: 'http://download.newrelic.com/infrastructure_agent/windows/integrations/nri-mssql/nri-mssql-amd64.msi'
   config_file: mssql-config.yml
-  root_dir: "{{ newrelic_infra_collection.integrations_dir }}"
+  root_dir: "{{ newrelic_infra_collection_integrations_directory }}"

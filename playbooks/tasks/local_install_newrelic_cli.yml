@@ -28,12 +28,13 @@
       ansible.builtin.apt:
         deb: "{{ _url }}"
         state: present
+      run_once: True
       environment:
         DEBIAN_FRONTEND: noninteractive
-
       when: _file_type == 'deb'
     - name: Install CLI Tool From RPM
       ansible.builtin.dnf:
         name: "{{ _url }}"
         state: present
+      run_once: True
       when: _file_type == 'rpm'

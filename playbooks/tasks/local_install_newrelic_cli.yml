@@ -17,7 +17,7 @@
            v{{ newrelic_infra_collection_cli_version }}/newrelic-cli_{{ newrelic_infra_collection_cli_version }}_Linux_\
            {{ _arch }}.{{ _file_type }}"
     state: present
-    disable_gpg_check: True
+    # disable_gpg_check: True
   environment:
     DEBIAN_FRONTEND: noninteractive
   delegate_to: localhost

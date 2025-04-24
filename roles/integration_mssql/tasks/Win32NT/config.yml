@@ -16,16 +16,15 @@
     src: instance_variables_part.j2
   register: _variable_config_part
 
-- debug: 
-    var: integration_mssql_custom_queries
-
 - name: Create Custom Query Config
   ansible.windows.win_copy:
     dest: "{{ integration_mssql_vars.root_dir }}\\{{ _integration_mssql_pretty_name }}_custom_queries.yml"
     content: |
       ---
       queries:
-        {{ integration_mssql_custom_queries | to_yaml(indent=4) }}
+      {% for query in integration_mssql_custom_queries %}
+        {{ query | to_nice_yaml(indent=2) }}
+      {% endfor %}
   when: integration_mssql_custom_queries
 
 - name: Update Integration Config File

@@ -19,7 +19,10 @@
 - name: Create Custom Query Config
   ansible.windows.win_copy:
     dest: "{{ integration_mssql_vars.root_dir }}\\{{ _integration_mssql_pretty_name }}_custom_queries.yml"
-    content: "{{ integration_mssql_custom_queries | to_yaml }}"
+    content: |
+      ---
+      queries:
+      {{ integration_mssql_custom_queries | to_yaml(indent=4) }}
   when: integration_mssql_custom_queries
 
 - name: Update Integration Config File

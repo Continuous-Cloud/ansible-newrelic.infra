@@ -26,6 +26,8 @@
       CUSTOM_METRICS_CONFIG: '{{ integration_mssql_vars.root_dir }}\{{ _integration_mssql_pretty_name }}_custom_queries.yml'
       {%- endif %}
 
+      QUERY_MONITORING_FETCH_INTERVAL: "{{ integration_mssql_interval }}"
+
     interval: {{ integration_mssql_interval }}s
     labels:
       role: mssql

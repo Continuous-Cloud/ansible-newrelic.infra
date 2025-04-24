@@ -26,7 +26,7 @@
       CUSTOM_METRICS_CONFIG: '{{ integration_mssql_vars.root_dir }}\{{ _integration_mssql_pretty_name }}_custom_queries.yml'
       {%- endif %}
 
-    interval: 15s
+    interval: {{ integration_mssql_interval }}s
     labels:
       role: mssql
       db_hostname: {{ integration_mssql_hostname }}

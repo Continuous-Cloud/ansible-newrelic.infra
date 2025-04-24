@@ -12,3 +12,4 @@ integration_mssql_custom_queries: >-
 integration_mssql_obfuscate_secrets: >-
   bool, If true, the username and password values are obfuscated before adding them
   to the config file
+integration_mssql_interval: int, The collection interval in seconds of the agent. Smaller values mean more frequent data points.

@@ -20,7 +20,8 @@ license_file: ''
 
 tags: []
 
-dependencies: []
+dependencies:
+  'git+https://github.com/mikemorency/newrelic.core.git': 'main'
 
 repository:
 

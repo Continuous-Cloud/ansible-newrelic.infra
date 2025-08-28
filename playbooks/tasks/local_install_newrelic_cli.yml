@@ -14,7 +14,7 @@
 - name: Install The New Relic CLI Tool
   delegate_to: localhost
   delegate_facts: True
-  become: True
+  become: "{{ newrelic_infra_collection_local_become | default(True) }}"
   vars:
     _arch: >-
       {{ (hostvars['localhost'].ansible_architecture == 'aarch64') | ternary('arm64', 'x86_64') }}

@@ -4,7 +4,7 @@
   ansible.windows.win_copy:
     src: "{{ newrelic_infra_collection_custom_integrations_directory }}\\nri-perfmon\\nri-perfmon-definition.yml"
     dest: "{{ newrelic_infra_collection_custom_integrations_directory }}"
-    remote_src: True
+    remote_src: true
   notify: restart newrelic
 
 - name: Template Integration Config

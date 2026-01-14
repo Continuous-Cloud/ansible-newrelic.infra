@@ -13,23 +13,23 @@
   ansible.builtin.uri:
     url: "{{ integration_perfmon_vars.latest_url }}"
   delegate_to: localhost
-  run_once: True
-  become: False
-  register: _latest_lookup
+  run_once: true
+  become: false
+  register: _integration_perfmon_latest_lookup
 
 - name: Store Latest Version
   ansible.builtin.set_fact:
-    _perfmon_latest_version: "{{ _latest_lookup.url | split('/') | last }}"
+    _integration_perfmon_latest_version: "{{ _integration_perfmon_latest_lookup.url | split('/') | last }}"
 
 - name: Check Latest Version Exists On Host
   ansible.windows.win_stat:
     path: "{{ newrelic_infra_collection_custom_integrations_directory }}\\nri-perfmon\\\
-           {{ _perfmon_latest_version }}.version"
-  register: _perfmon_check
+           {{ _integration_perfmon_latest_version }}.version"
+  register: _integration_perfmon_check
 
 - name: Install Latest
   ansible.builtin.include_tasks: "{{ role_path }}/tasks/Win32NT/install.yml"
-  when: not _perfmon_check.stat.exists
+  when: not _integration_perfmon_check.stat.exists
 
 - name: Configure Perfmon
   ansible.builtin.include_tasks: "{{ role_path }}/tasks/Win32NT/config.yml"

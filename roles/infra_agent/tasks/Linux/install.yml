@@ -15,10 +15,10 @@
         baseurl: "https://download.newrelic.com/infrastructure_agent/linux/yum/\
                   {{ _repo_distro[ansible_distribution | lower] }}/\
                   {{ ansible_distribution_major_version }}/{{ ansible_architecture }}"
-        gpgcheck: True
+        gpgcheck: true
         gpgkey: 'https://download.newrelic.com/infrastructure_agent/gpg/newrelic-infra.gpg'
         name: newrelic-infra
-        repo_gpgcheck: True
+        repo_gpgcheck: true
         state: present
         description: New Relic Infrastructure
 
@@ -44,4 +44,4 @@
 - name: Install Infra Agent
   ansible.builtin.package:
     name: newrelic-infra
-    state: latest
+    state: latest  # noqa: package-latest

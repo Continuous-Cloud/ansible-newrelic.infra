@@ -10,25 +10,26 @@
       ansible.builtin.get_url:
         url: 'https://download.newrelic.com/infrastructure_agent/windows/newrelic-infra.msi'
         dest: /tmp/nrinfra.msi
-      run_once: True
-      become: False
+        mode: '0644'
+      run_once: true
+      become: false
       delegate_to: localhost
     - name: Copy Package Over
       ansible.windows.win_copy:
         src: /tmp/nrinfra.msi
         dest: 'c:\nrinfra.msi'
-        remote_src: False
+        remote_src: false
 
 - name: Lookup Infra Service
   ansible.windows.win_service_info:
     name: newrelic-infra
-  register: _service_stat
+  register: _infra_agent_service_stat
 
 - name: Stop Service If It Exists
   ansible.windows.win_service:
     name: newrelic-infra
     state: stopped
-  when: _service_stat.services[0] is defined
+  when: _infra_agent_service_stat.services[0] is defined
 
 - name: Run MSI to Install Infra Agent
   ansible.windows.win_package:

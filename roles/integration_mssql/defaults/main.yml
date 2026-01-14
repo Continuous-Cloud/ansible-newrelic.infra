@@ -1,7 +1,7 @@
 ---
 integration_mssql_hostname: localhost
-integration_mssql_ssl: True
+integration_mssql_ssl: true
 integration_mssql_custom_labels: {}
 integration_mssql_custom_queries: []
-integration_mssql_obfuscate_secrets: True
+integration_mssql_obfuscate_secrets: true
 integration_mssql_interval: 30

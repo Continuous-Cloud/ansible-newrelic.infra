@@ -18,12 +18,12 @@ license:
 
 license_file: ''
 
-tags: []
+tags: ['monitoring']
 
 dependencies:
   'git+https://github.com/mikemorency/newrelic.core.git': 'main'
 
-repository:
+repository: ''
 
 build_ignore:
   - .venv

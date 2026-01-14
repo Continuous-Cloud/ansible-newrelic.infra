@@ -5,7 +5,7 @@
       - integration_mssql_username is defined
       - integration_mssql_password is defined
     fail_msg: This is a required variable for this role
-    quiet: True
+    quiet: true
 
 - name: Check Instance or Port Is Defined
   ansible.builtin.fail:
@@ -17,8 +17,14 @@
 - name: Obfuscate Authentication Parameters
   when: integration_mssql_obfuscate_secrets
   block:
+    - name: Check for New Relic CLI
+      ansible.builtin.shell: command -v newrelic
+      changed_when: false
+      failed_when: false
+      register: _integration_mssql_newrelic_cli_check
     - name: Install New Relic CLI Locally
       ansible.builtin.include_tasks: "{{ role_path }}/../../playbooks/tasks/local_install_newrelic_cli.yml"
+      when: _integration_mssql_newrelic_cli_check.rc != 0
     - name: Obfuscate Username and Password
       ansible.builtin.set_fact:
         _integration_mssql_obfuscated_secrets:
@@ -36,10 +42,10 @@
     - name: Check For Master MSSQL Config File
       ansible.windows.win_stat:
         path: "{{ integration_mssql_vars.root_dir }}\\{{ integration_mssql_vars.config_file }}"
-      register: _check_file
+      register: _integration_mssql_check_file
     - name: Install SQL Server Integration
       ansible.builtin.include_tasks: "{{ role_path }}/tasks/Win32NT/install.yml"
-      when: not _check_file.stat.exists
+      when: not _integration_mssql_check_file.stat.exists
     - name: Remove Installer if present
       ansible.windows.win_file:
         path: 'c:\nrsqlserver.msi'

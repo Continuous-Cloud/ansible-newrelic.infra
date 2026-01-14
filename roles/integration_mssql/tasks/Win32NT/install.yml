@@ -10,14 +10,15 @@
       ansible.builtin.get_url:
         url: "{{ integration_mssql_vars.url }}"
         dest: /tmp/nrsqlserver.msi
-      run_once: True
-      become: False
+        mode: '0644'
+      run_once: true
+      become: false
       delegate_to: localhost
     - name: Copy Package Over
       ansible.windows.win_copy:
         src: /tmp/nrsqlserver.msi
         dest: 'c:\nrsqlserver.msi'
-        remote_src: False
+        remote_src: false
 
 - name: Install MSSQL Agent
   ansible.windows.win_package:

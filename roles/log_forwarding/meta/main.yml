@@ -11,15 +11,16 @@ galaxy_info:
   platforms:
     - name: Windows
       versions:
-        - '2016'
-        - '2012'
+        - '2025'
+        - '2022'
+        - '2019'
     - name: Amazon Linux
       version:
         - '2023'
     - name: EL
       versions:
-        - '8'
-        - '7'
+        - '10'
+        - '9'
 
   galaxy_tags: []
 

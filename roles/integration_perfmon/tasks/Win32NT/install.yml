@@ -2,17 +2,17 @@
 - name: Download Latest Version
   ansible.windows.win_get_url:
     url: "{{ integration_perfmon_vars.download_url }}\
-          {{ _perfmon_latest_version }}/nri-perfmon-release-x64.zip"
+          {{ _integration_perfmon_latest_version }}/nri-perfmon-release-x64.zip"
     dest: 'c:\nri-perfmon-release-x64.zip'
 
 - name: Extract Zip
   community.windows.win_unzip:
     src: 'c:\nri-perfmon-release-x64.zip'
     dest: "{{ newrelic_infra_collection_custom_integrations_directory }}\\nri-perfmon"
-    delete_archive: True
+    delete_archive: true
 
 - name: Update Version file
   ansible.windows.win_file:
     path: "{{ newrelic_infra_collection_custom_integrations_directory }}\\nri-perfmon\\\
-           {{ _perfmon_latest_version }}.version"
+           {{ _integration_perfmon_latest_version }}.version"
     state: touch

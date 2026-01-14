@@ -3,13 +3,13 @@
   ansible.builtin.setup:
     gather_subset:
       - system
-  when: ansible_system is not defined
+  when: ansible_facts['system'] is not defined
 
 - name: Load New Relic Shared Vars
-  ansible.builtin.include_vars: "{{ role_path }}/../../vars/{{ ansible_system }}.yml"
+  ansible.builtin.include_vars: "{{ role_path }}/../../vars/{{ ansible_facts['system'] }}.yml"
 
 - name: This Role Supports Windows Only
-  when: ansible_system == 'Win32NT'
+  when: ansible_facts['system'] == 'Win32NT'
   block:
     - name: Include Windows Tasks
       ansible.builtin.include_tasks: "{{ role_path }}/tasks/Win32NT/main.yml"

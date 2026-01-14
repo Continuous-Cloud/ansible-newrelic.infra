@@ -5,7 +5,7 @@
       - system
   when: not hostvars['localhost'].ansible_facts
   delegate_to: localhost
-  delegate_facts: True
+  delegate_facts: true
 
 - name: Load New Relic Shared Vars
   ansible.builtin.include_vars: ../../vars/all.yml
@@ -13,8 +13,8 @@
 
 - name: Install The New Relic CLI Tool
   delegate_to: localhost
-  delegate_facts: True
-  become: "{{ newrelic_infra_collection_local_become | default(True) }}"
+  delegate_facts: true
+  become: "{{ newrelic_infra_collection_local_become | default(true) }}"
   vars:
     _arch: >-
       {{ (hostvars['localhost'].ansible_architecture == 'aarch64') | ternary('arm64', 'x86_64') }}
@@ -28,7 +28,7 @@
       ansible.builtin.apt:
         deb: "{{ _url }}"
         state: present
-      run_once: True
+      run_once: true
       environment:
         DEBIAN_FRONTEND: noninteractive
       when: _file_type == 'deb'
@@ -36,5 +36,5 @@
       ansible.builtin.dnf:
         name: "{{ _url }}"
         state: present
-      run_once: True
+      run_once: true
       when: _file_type == 'rpm'

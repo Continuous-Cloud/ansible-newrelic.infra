@@ -6,11 +6,12 @@
   ansible.builtin.template:
     src: newrelic-infra.yml.j2
     dest: /etc/newrelic-infra.yml
+    mode: '0644'
   notify: restart newrelic
 
 - name: Start and Enable Infra Service
   ansible.builtin.service:
     name: newrelic-infra
     state: started
-    enabled: True
+    enabled: true
   when: molecule_yml is not defined

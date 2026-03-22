@@ -21,6 +21,7 @@
       ansible.builtin.shell: command -v newrelic
       changed_when: false
       failed_when: false
+      delegate_to: localhost
       register: _integration_mssql_newrelic_cli_check
     - name: Install New Relic CLI Locally
       ansible.builtin.include_tasks: "{{ role_path }}/../../playbooks/tasks/local_install_newrelic_cli.yml"

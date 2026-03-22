@@ -25,7 +25,7 @@
       {% for query in integration_mssql_custom_queries %}
         - {{ query | to_nice_yaml | indent(width=4, first=false) }}
       {% endfor %}
-  when: integration_mssql_custom_queries
+  when: integration_mssql_custom_queries | length > 0
 
 - name: Update Integration Config File
   when: _integration_mssql_instance_config_part is changed or _integration_mssql_variable_config_part is changed
@@ -52,7 +52,7 @@
         Get-ChildItem "{{ integration_mssql_vars.root_dir }}\\mssql_config_parts" -Filter "*.integration" | `
         foreach { $_ | get-content | add-content "{{ integration_mssql_vars.root_dir }}\{{ integration_mssql_vars.config_file }}" }
       register: _integration_mssql_gen_master
-      failed_when: _integration_mssql_gen_master.rc != 0 or _integration_mssql_gen_master.stderr
+      failed_when: _integration_mssql_gen_master.rc != 0 or _integration_mssql_gen_master.stderr != ""
   always:
     - name: Start The New Relic Service Again
       ansible.windows.win_service:

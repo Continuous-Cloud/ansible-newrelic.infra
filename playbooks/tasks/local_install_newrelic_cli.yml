@@ -36,5 +36,6 @@
       ansible.builtin.dnf:
         name: "{{ _url }}"
         state: present
+        disable_gpg_check: true
       run_once: true
       when: _file_type == 'rpm'

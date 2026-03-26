@@ -5,7 +5,10 @@
     dest: "{{ log_forwarding_config_directory }}\\\
            {{ log_forwarding_src_template | basename | regex_replace('.j2', '') }}"
   notify: restart newrelic
-  when: log_forwarding_src_template | length > 0
+  when: log_forwarding_src_templates | length > 0
+  loop: "{{ log_forwarding_src_templates }}"
+  loop_control:
+    loop_var: log_forwarding_src_template
 
 - name: Template Over New Relic Log Forwarding Configs
   ansible.windows.win_template:

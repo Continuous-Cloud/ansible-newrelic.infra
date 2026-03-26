@@ -1,4 +1,4 @@
 ---
-log_forwarding_src_template: ''
+log_forwarding_src_templates: []
 log_forwarding_configs: {}
 log_forwarding_configs_name: ''
